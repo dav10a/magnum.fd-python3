@@ -17,7 +17,6 @@ public:
             return "Field(%r)" % self.mesh
           
           def interpolate(self, mesh):
-            # Get matrix with interpolated values in 'interp_mat'   
             need_interpolate = (self.mesh.num_nodes != mesh.num_nodes)
             if need_interpolate:
               nx, ny, nz = mesh.num_nodes # new size (in number of cells)
@@ -25,7 +24,6 @@ public:
             else:
               interp_mat = self # no need to interpolate..
           
-            # Create interpolated vector field from matrix 'interp_mat'
             result = Field(mesh)
             result.assign(interp_mat)
             return result
