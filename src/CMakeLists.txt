@@ -8,8 +8,8 @@ project(Magneto)
 option(ENABLE_CUDA_32 "Enable CUDA (only 32 bit support)" OFF)
 option(ENABLE_CUDA_64 "Enable CUDA (both 32 and 64 bit support, needs CUDA device capability of 2.0 or higher)" OFF)
 
-option(USE_PYTHON2 "Use Python2" OFF)
-option(USE_PYTHON3 "Use Python3" OFF)
+
+
 option(USE_CVODE "Use CVode" OFF)
 
 if(ENABLE_CUDA_32 OR ENABLE_CUDA_64)
@@ -57,13 +57,10 @@ include(${SWIG_USE_FILE})
 ###    Find Python                                         ###
 ##############################################################
 
-if(USE_PYTHON2)
-  set (USE_PYTHON 2)
-elseif(USE_PYTHON3)
-  set (USE_PYTHON 3)
-endif(USE_PYTHON2)
 
-find_package(Python ${USE_PYTHON} REQUIRED)
+
+find_package(Python 3 REQUIRED)
+find_package(PythonLibs REQUIRED)
 
 # OpenMP support (optional)
 #include(FindOpenMP)
@@ -147,7 +144,7 @@ endif(SUNDIALS_CVODE_FOUND)
 
 #FIND_PACKAGE(Boost 1.50.0)
 #IF(Boost_FOUND)
-#  INCLUDE_DIRECTORIES("${Boost_INCLUDE_DIRS}" "/usr/include/python2.7")
+#  INCLUDE_DIRECTORIES("${Boost_INCLUDE_DIRS}" "/usr/include/python3")
 #  SET(Boost_USE_STATIC_LIBS OFF)
 #  SET(Boost_USE_MULTITHREADED ON)
 #  SET(Boost_USE_STATIC_RUNTIME OFF)
@@ -193,7 +190,10 @@ endif()
 # Compile Cuda kernels into library
 if(ENABLE_CUDA)
   include(FindCUDA)
-  #find_package(CUDA)
+  find_package(CUDA)
+  include_directories(${CUDA_INCLUDE_DIRS})
+
+  
 
   # Set HAVE_CUDA and HAVE_CUDA_64 (for config.h)
   set(HAVE_CUDA ON)
@@ -205,7 +205,7 @@ if(ENABLE_CUDA)
   set(CUDA_PROPAGATE_HOST_FLAGS OFF)
 
   if(ENABLE_CUDA_64)
-    set(CUDA_NVCC_FLAGS --gpu-architecture=compute_20;-Xcompiler;-fpic;-O6;--use_fast_math)
+    set(CUDA_NVCC_FLAGS  -Xcompiler;-fpic;-O6;--use_fast_math)
   else(ENABLE_CUDA_64)
     set(CUDA_NVCC_FLAGS -Xcompiler;-fpic;-O6;--use_fast_math)
   endif()
@@ -265,7 +265,7 @@ configure_file(
 ##############################################################
 
 # set PYTHON_SITE_MODULES path
-#execute_process ( COMMAND python${PYTHON_VERSION} -c "import sys; from distutils.sysconfig import get_python_lib; d0 = get_python_lib(0,0,'/usr/local'); d1 = get_python_lib(); print(d0 if d0 in sys.path else d1)" OUTPUT_VARIABLE PYTHON_SITE_MODULES OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process ( COMMAND python3 -c "import sys; from distutils.sysconfig import get_python_lib; d0 = get_python_lib(0,0,'/usr/local'); d1 = get_python_lib(); print(d0 if d0 in sys.path else d1)" OUTPUT_VARIABLE PYTHON_SITE_MODULES OUTPUT_STRIP_TRAILING_WHITESPACE)
 message ("-- Found Python ${PYTHON_VERSION}, will install at ${PYTHON_SITE_MODULES}")
 
 # install directory magnum, exclude the symlinks
@@ -278,3 +278,4 @@ else()
   # copy builded destinations of cpu symlinks
   install(FILES build/magneto_cpu.py build/_magneto_cpu.so DESTINATION "${PYTHON_SITE_MODULES}/magnum")
 endif()
+

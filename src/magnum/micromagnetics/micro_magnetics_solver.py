@@ -93,7 +93,7 @@ class MicroMagneticsSolver(solver.Solver):
                 h = M_diff.dotSum(M_diff) / M_diff.dotSum(dM_diff)
               else:
                 h = M_diff.dotSum(dM_diff) / dM_diff.dotSum(dM_diff)
-            except ZeroDivisionError, ex:
+            except (ZeroDivisionError, ex):
               h = h_max
 
             h_sign = math.copysign(1, h)
