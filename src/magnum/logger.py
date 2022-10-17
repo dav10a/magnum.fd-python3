@@ -89,8 +89,8 @@ def callback(level, msg):
     elif level == 4:
         logger.critical(msg)
 
-magneto.setDebugCallback(callback)
-atexit.register(magneto.setDebugCallback, None)
+#magneto.setDebugCallback(callback)
+#atexit.register(magneto.setDebugCallback, None)
 
 # cleanup
 del ch

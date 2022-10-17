@@ -192,8 +192,7 @@ void deinitialize(const std::string &config_path)
 #endif
 
 	// just to be sure
-	PythonCallable empty_callback;
-	setDebugCallback(empty_callback);
+	
 }
 
 void flush()

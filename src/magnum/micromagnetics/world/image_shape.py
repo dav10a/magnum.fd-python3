@@ -24,7 +24,7 @@ from magnum.micromagnetics.world.shape import Shape
 
 
 try:
-    import Image
+    from PIL import Image
     _found_image_lib = True
 except:
     _found_image_lib = False
