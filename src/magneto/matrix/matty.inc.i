@@ -371,14 +371,14 @@ def extend():
 
   def vector_matrix_to_numpy(self):
     # Get raw data
-    data = str(self.toByteArray())
+    data = self.toByteArray()
   
     # Convert to numpy array
     try:
       import numpy as np
     except ImportError:
       raise ImportError("numpy library not found!")
-    N = np.fromstring(data, dtype=np.float64, count=3*self.size())
+    N = np.frombuffer(data, dtype=np.float64, count=3*self.size())
     N.shape = self.shape + (3,)
     N.strides = (N.itemsize * 3, N.itemsize * 3 * self.dimX(), N.itemsize * 3 * self.dimX() * self.dimY(), N.itemsize)
     return N
@@ -394,14 +394,14 @@ def extend():
 
   def matrix_to_numpy(self):
     # Get raw data
-    data = str(self.toByteArray())
+    data = self.toByteArray()
   
     # Convert to numpy array
     try:
       import numpy as np
     except ImportError:
       raise ImportError("numpy library not found!")
-    N = np.fromstring(data, dtype=np.float64, count=self.size())
+    N = np.frombuffer(data, dtype=np.float64, count=self.size())
     N.shape = self.shape
     N.strides = (N.itemsize, N.itemsize * self.dimX(), N.itemsize * self.dimX() * self.dimY())
     return N
