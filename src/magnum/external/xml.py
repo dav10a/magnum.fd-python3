@@ -47,12 +47,12 @@ class XmlWriter(object):
         self.stream.close()
 
     def addDeclaration(self):
-        self.stream.write('<?xml version="1.0"?>')
+        self.stream.write(str.encode('<?xml version="1.0"?>'))
 
     def openElement(self, tag):
         if self.openTag:
-            self.stream.write(">")
-        self.stream.write("\n<%s" % tag)
+            self.stream.write(str.encode(">"))
+        self.stream.write(str.encode("\n<%s" % tag))
         self.openTag = True
         self.current.append(tag)
         return self
@@ -61,18 +61,18 @@ class XmlWriter(object):
         if tag:
             assert self.current.pop() == tag
             if self.openTag:
-                self.stream.write(">")
+                self.stream.write(str.encode(">"))
                 self.openTag = False
-            self.stream.write("\n</%s>" % tag)
+            self.stream.write(str.encode("\n</%s>" % tag))
         else:
-            self.stream.write("/>")
+            self.stream.write(str.encode("/>"))
             self.openTag = False
             self.current.pop()
         return self
 
     def addText(self, text):
         if self.openTag:
-            self.stream.write(">\n")
+            self.stream.write(str.encode(">\n"))
             self.openTag = False
         self.stream.write(text)
         return self
@@ -80,5 +80,5 @@ class XmlWriter(object):
     def addAttributes(self, **kwargs):
         assert self.openTag
         for key in kwargs:
-            self.stream.write(' %s="%s"' % (key, kwargs[key]))
+            self.stream.write(str.encode(' %s="%s"' % (key, kwargs[key])))
         return self
