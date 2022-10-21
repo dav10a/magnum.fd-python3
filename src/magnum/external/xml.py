@@ -74,7 +74,7 @@ class XmlWriter(object):
         if self.openTag:
             self.stream.write(str.encode(">\n"))
             self.openTag = False
-        self.stream.write(text)
+        self.stream.write(str.encode(text))
         return self
 
     def addAttributes(self, **kwargs):
