@@ -68,9 +68,7 @@ class AlternatingField(module.Module):
             fn    = getattr(self, self.__func)
 
             # Calculate field 'A'.
-            t = state.t
-            if callable(amp):
-                amp=amp(t)
+            t = state.t            
             if fn: # with user function
                 if any(x != (0.0, 0.0, 0.0) for x in (amp, freq, phase, offs)):
                     raise ValueError("AlternatingField.calculates: If %s is defined, the parameters %s, %s, %s and %s must be zero vectors, i.e. (0.0, 0.0, 0.0)" % (self.__func, self.__offs, self.__amp, self.__freq, self.__phase))
