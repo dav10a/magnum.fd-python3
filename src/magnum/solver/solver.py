@@ -93,23 +93,16 @@ class Solver(object):
         self.step_with_t_max(1e100)
 
     def solve(self, stop_condition):
-        self.state.flush_cache()
 
         # Run solver loop.
         # Also, custom sigint handler while loop is running.
         self.__interrupted = False
-        def my_int_handler(signum, frame):
-            assert signum == signal.SIGINT
-            self.__interrupted = True
-        old_sigint_handler = signal.getsignal(signal.SIGINT)
-        signal.signal(signal.SIGINT, my_int_handler)  # install sigint handler
+        
         try:
             self.__solve_loop(stop_condition)  # run solver loop
         finally:
-            signal.signal(signal.SIGINT, old_sigint_handler)  # uninstall sigint handler
             del self.__interrupted
 
-        self.state.flush_cache()
 
     def __call_step_handlers(self):
         for step_handler, condition in self.__step_handlers:
